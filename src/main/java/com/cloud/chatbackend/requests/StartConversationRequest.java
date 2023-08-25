@@ -5,6 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CreateConversationRequest {
+public class StartConversationRequest {
     private Long userId;
 }

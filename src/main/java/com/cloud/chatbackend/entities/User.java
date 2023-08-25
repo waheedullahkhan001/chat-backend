@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 import java.util.Date;
 import java.util.List;
 
-@Entity
+@Entity(name = "`users`")
 @Getter
 @Setter
 public class User extends AbstractPersistable<Long> {
