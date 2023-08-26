@@ -21,6 +21,8 @@ public class User extends AbstractPersistable<Long> {
     private Date lastLogin;
     private Date memberSince;
 
+    private String role;
+
     @ManyToMany
     private List<Conversation> conversations;
 

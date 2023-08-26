@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/message")
 @RequiredArgsConstructor
 public class MessageController {
+
     private final MessageService messageService;
 
     @PostMapping("/send")

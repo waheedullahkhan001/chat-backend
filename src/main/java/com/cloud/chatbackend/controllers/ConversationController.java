@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/conversation")
 @RequiredArgsConstructor
 public class ConversationController {
+
     private final ConversationService conversationService;
 
     @GetMapping("/getAll")

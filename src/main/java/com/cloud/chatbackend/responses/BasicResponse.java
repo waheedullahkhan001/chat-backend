@@ -1,9 +1,11 @@
 package com.cloud.chatbackend.responses;
 
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 @Builder
 public class BasicResponse {
-    public Boolean success;
-    public String message;
+    private Boolean success;
+    private String message;
 }
