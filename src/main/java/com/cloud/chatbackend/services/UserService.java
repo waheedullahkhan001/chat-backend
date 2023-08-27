@@ -27,11 +27,19 @@ public class UserService {
         Optional<User> user = userRepository.findByUsername(loginRequest.getUsername());
 
         if (user.isEmpty()) {
-            throw new RuntimeException("User not found");
+            // TODO: Use custom exception handling
+            return BasicResponse.builder()
+                    .success(false)
+                    .message("User not found")
+                    .build();
         }
 
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.get().getPassword())) {
-            throw new RuntimeException("Password incorrect");
+            // TODO: Use custom exception handling
+            return BasicResponse.builder()
+                    .success(false)
+                    .message("Incorrect password")
+                    .build();
         }
 
         String token = jwtService.generateToken(user.get().getUsername(), user.get().getRole());
@@ -44,9 +52,13 @@ public class UserService {
     }
 
     public BasicResponse register(RegisterRequest registerRequest) {
-        userRepository.findByUsername(registerRequest.getUsername()).ifPresent(user -> {
-            throw new RuntimeException("User already exists");
-        });
+        if (userRepository.findByUsername(registerRequest.getUsername()).isPresent()) {
+            // TODO: Use custom exception handling
+            return BasicResponse.builder()
+                    .success(false)
+                    .message("User already exists")
+                    .build();
+        }
 
         registerRequest.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
 
