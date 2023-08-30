@@ -8,6 +8,7 @@ import com.cloud.chatbackend.responses.BasicResponse;
 import com.cloud.chatbackend.responses.LoginResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,11 @@ public class UserService {
     private final ModelMapper modelMapper;
     private final JwtService jwtService;
 
+
+    public User getUserFromSecurityContext() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByUsername(username).orElse(null); // TODO: Throw exception if not found
+    }
     public BasicResponse login(LoginRequest loginRequest) {
         Optional<User> user = userRepository.findByUsername(loginRequest.getUsername());
 
