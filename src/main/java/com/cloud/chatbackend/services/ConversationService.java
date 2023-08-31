@@ -2,6 +2,7 @@ package com.cloud.chatbackend.services;
 
 import com.cloud.chatbackend.entities.Conversation;
 import com.cloud.chatbackend.entities.User;
+import com.cloud.chatbackend.repositories.ConversationRepository;
 import com.cloud.chatbackend.repositories.UserRepository;
 import com.cloud.chatbackend.requests.StartConversationRequest;
 import com.cloud.chatbackend.responses.BasicResponse;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,6 +18,7 @@ import java.util.Optional;
 public class ConversationService {
 
     private final UserRepository userRepository;
+    private final ConversationRepository conversationRepository;
 
     public BasicResponse getAllConversations() {
         return BasicResponse.builder()
@@ -25,10 +28,14 @@ public class ConversationService {
     }
 
     public BasicResponse startConversation(StartConversationRequest startConversationRequest) {
-
-        // TODO: Move and improve this logic somewhere else
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<User> user = userRepository.findByUsername(username);
+        if (user.isEmpty()) {
+            return BasicResponse.builder()
+                    .success(false)
+                    .message("The requesting does not exist")
+                    .build();
+        }
 
         Optional<User> targetUser = userRepository.findByUsername(startConversationRequest.getUsername());
         if (targetUser.isEmpty()) {
@@ -38,7 +45,13 @@ public class ConversationService {
                     .build();
         }
 
-        // TODO: Check if the already conversation exists
+        Optional<Conversation> existingConversation = conversationRepository.findByParticipants(List.of(user.get(), targetUser.get()));
+        if (existingConversation.isPresent()) {
+            return BasicResponse.builder()
+                    .success(false)
+                    .message("Conversation already exists")
+                    .build();
+        }
 
         Conversation conversation = new Conversation();
 
