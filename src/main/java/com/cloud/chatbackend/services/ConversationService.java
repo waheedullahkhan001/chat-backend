@@ -6,6 +6,7 @@ import com.cloud.chatbackend.repositories.ConversationRepository;
 import com.cloud.chatbackend.repositories.UserRepository;
 import com.cloud.chatbackend.requests.StartConversationRequest;
 import com.cloud.chatbackend.responses.BasicResponse;
+import com.cloud.chatbackend.responses.ConversationsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -20,10 +21,12 @@ public class ConversationService {
     private final UserRepository userRepository;
     private final ConversationRepository conversationRepository;
 
-    public BasicResponse getAllConversations() {
-        return BasicResponse.builder()
-                .success(false)
-                .message("Not implemented yet")
+    public ConversationsResponse getAllConversations() {
+        List<Conversation> conversations = conversationRepository.findAll();
+        return ConversationsResponse.builder()
+                .success(true)
+                .message("Conversations fetched")
+                .conversations(conversations)
                 .build();
     }
 
@@ -33,7 +36,7 @@ public class ConversationService {
         if (user.isEmpty()) {
             return BasicResponse.builder()
                     .success(false)
-                    .message("The requesting does not exist")
+                    .message("The requesting user does not exist")
                     .build();
         }
 
