@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class ConversationsResponse extends BasicResponse{
+public class ConversationsResponse extends BasicResponse {
     private final List<Conversation> conversations;
 
     @Builder

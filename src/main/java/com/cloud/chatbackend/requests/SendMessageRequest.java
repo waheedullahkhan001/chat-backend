@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class SendMessageRequest {
     private Long conversationId;
-    private String message;
+    private String content;
 }
