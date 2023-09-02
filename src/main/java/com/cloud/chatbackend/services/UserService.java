@@ -8,7 +8,6 @@ import com.cloud.chatbackend.responses.BasicResponse;
 import com.cloud.chatbackend.responses.LoginResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,15 +24,10 @@ public class UserService {
     private final JwtService jwtService;
 
 
-    public User getUserFromSecurityContext() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findByUsername(username).orElse(null); // TODO: Throw exception if not found
-    }
     public BasicResponse login(LoginRequest loginRequest) {
         Optional<User> user = userRepository.findByUsername(loginRequest.getUsername());
 
         if (user.isEmpty()) {
-            // TODO: Use custom exception handling
             return BasicResponse.builder()
                     .success(false)
                     .message("User not found")
@@ -41,7 +35,6 @@ public class UserService {
         }
 
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.get().getPassword())) {
-            // TODO: Use custom exception handling
             return BasicResponse.builder()
                     .success(false)
                     .message("Incorrect password")
@@ -59,7 +52,6 @@ public class UserService {
 
     public BasicResponse register(RegisterRequest registerRequest) {
         if (userRepository.findByUsername(registerRequest.getUsername()).isPresent()) {
-            // TODO: Use custom exception handling
             return BasicResponse.builder()
                     .success(false)
                     .message("User already exists")
