@@ -3,6 +3,7 @@ package com.cloud.chatbackend.services;
 import com.cloud.chatbackend.entities.User;
 import com.cloud.chatbackend.exceptions.BadRequestException;
 import com.cloud.chatbackend.exceptions.NotFoundException;
+import com.cloud.chatbackend.exceptions.UnauthorizedException;
 import com.cloud.chatbackend.repositories.UserRepository;
 import com.cloud.chatbackend.requests.LoginRequest;
 import com.cloud.chatbackend.requests.RegisterRequest;
@@ -10,6 +11,7 @@ import com.cloud.chatbackend.responses.BasicResponse;
 import com.cloud.chatbackend.responses.LoginResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,12 @@ public class UserService {
     private final ModelMapper modelMapper;
     private final JwtService jwtService;
 
+
+    public User getUserFromContext() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByUsername(username).orElseThrow(
+                () -> new UnauthorizedException("The requesting user does not exist"));
+    }
 
     public LoginResponse login(LoginRequest loginRequest) {
         Optional<User> user = userRepository.findByUsername(loginRequest.getUsername());

@@ -3,14 +3,12 @@ package com.cloud.chatbackend.services;
 import com.cloud.chatbackend.entities.Conversation;
 import com.cloud.chatbackend.entities.User;
 import com.cloud.chatbackend.exceptions.BadRequestException;
-import com.cloud.chatbackend.exceptions.UnauthorizedException;
 import com.cloud.chatbackend.repositories.ConversationRepository;
 import com.cloud.chatbackend.repositories.UserRepository;
 import com.cloud.chatbackend.requests.StartConversationRequest;
 import com.cloud.chatbackend.responses.BasicResponse;
 import com.cloud.chatbackend.responses.ConversationsResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ConversationService {
 
+    private final UserService userService;
     private final UserRepository userRepository;
     private final ConversationRepository conversationRepository;
 
@@ -33,29 +32,20 @@ public class ConversationService {
     }
 
     public BasicResponse startConversation(StartConversationRequest startConversationRequest) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        Optional<User> user = userRepository.findByUsername(username);
-        if (user.isEmpty()) {
-            return BasicResponse.basicResponseBuilder()
-                    .success(false)
-                    .message("The requesting user does not exist")
-                    .build();
-        }
+        User user = userService.getUserFromContext();
 
-        Optional<User> targetUser = userRepository.findByUsername(startConversationRequest.getUsername());
-        if (targetUser.isEmpty()) {
-            throw new UnauthorizedException("The target user does not exist");
-        }
+        User targetUser = userRepository.findByUsername(startConversationRequest.getUsername()).orElseThrow(
+                () -> new BadRequestException("The target user does not exist"));
 
-        Optional<Conversation> existingConversation = conversationRepository.findByParticipantsContainingAndParticipantsContains(user.get(), targetUser.get());
+        Optional<Conversation> existingConversation = conversationRepository.findByParticipantsContainingAndParticipantsContains(user, targetUser);
         if (existingConversation.isPresent()) {
             throw new BadRequestException("The conversation already exists");
         }
 
         Conversation conversation = new Conversation();
 
-        conversation.getParticipants().add(user.get());
-        conversation.getParticipants().add(targetUser.get());
+        conversation.getParticipants().add(user);
+        conversation.getParticipants().add(targetUser);
 
         return BasicResponse.basicResponseBuilder()
                 .success(true)

@@ -7,14 +7,13 @@ This is a backend written in Spring Boot for a chat app with the most basic func
 - [x] Implement basic logic
 - [x] Implement Spring Security using JWT
 - [X] Use custom exception handling
-- [ ] Validation
 - [ ] Add swagger
+- [ ] Validation
 - [ ] Write test cases
 - [ ] Shift to WebFlux?
 - [ ] ...
 
 ### TODOs:
-- Maybe store user entity in SecurityContext?
 - Test the code
 - Add proper logging
 - Manage constants properly (better if done before test cases)
