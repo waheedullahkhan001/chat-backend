@@ -6,7 +6,7 @@ This is a backend written in Spring Boot for a chat app with the most basic func
 - [x] Create default project
 - [x] Implement basic logic
 - [x] Implement Spring Security using JWT
-- [ ] Use custom exception handling
+- [X] Use custom exception handling
 - [ ] Validation
 - [ ] Add swagger
 - [ ] Write test cases
