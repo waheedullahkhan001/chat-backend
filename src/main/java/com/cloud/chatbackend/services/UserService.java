@@ -28,14 +28,14 @@ public class UserService {
         Optional<User> user = userRepository.findByUsername(loginRequest.getUsername());
 
         if (user.isEmpty()) {
-            return BasicResponse.builder()
+            return BasicResponse.basicResponseBuilder()
                     .success(false)
                     .message("User not found")
                     .build();
         }
 
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.get().getPassword())) {
-            return BasicResponse.builder()
+            return BasicResponse.basicResponseBuilder()
                     .success(false)
                     .message("Incorrect password")
                     .build();
@@ -52,7 +52,7 @@ public class UserService {
 
     public BasicResponse register(RegisterRequest registerRequest) {
         if (userRepository.findByUsername(registerRequest.getUsername()).isPresent()) {
-            return BasicResponse.builder()
+            return BasicResponse.basicResponseBuilder()
                     .success(false)
                     .message("User already exists")
                     .build();
@@ -67,7 +67,7 @@ public class UserService {
 
         userRepository.save(user);
 
-        return BasicResponse.builder()
+        return BasicResponse.basicResponseBuilder()
                 .success(true)
                 .message("User registered successfully")
                 .build();

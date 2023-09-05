@@ -29,7 +29,7 @@ public class MessageService {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isEmpty()) {
-            return BasicResponse.builder()
+            return BasicResponse.basicResponseBuilder()
                     .success(false)
                     .message("The requesting user does not exist")
                     .build();
@@ -37,14 +37,14 @@ public class MessageService {
 
         Optional<Conversation> conversation = conversationRepository.findById(sendMessageRequest.getConversationId());
         if (conversation.isEmpty()) {
-            return BasicResponse.builder()
+            return BasicResponse.basicResponseBuilder()
                     .success(false)
                     .message("Conversation not found")
                     .build();
         }
 
         if (!conversation.get().getParticipants().contains(user.get())) {
-            return BasicResponse.builder()
+            return BasicResponse.basicResponseBuilder()
                     .success(false)
                     .message("The requesting user is not a participant of the conversation")
                     .build();
@@ -58,7 +58,7 @@ public class MessageService {
 
         messageRepository.save(message);
 
-        return BasicResponse.builder()
+        return BasicResponse.basicResponseBuilder()
                 .success(true)
                 .message("Message sent successfully")
                 .build();

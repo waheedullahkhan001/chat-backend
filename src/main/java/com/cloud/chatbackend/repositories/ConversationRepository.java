@@ -8,5 +8,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ConversationRepository extends JpaRepository<Conversation, Long> {
-    Optional<Conversation> findByParticipants(List<User> participants);
+    Optional<Conversation> findByParticipantsContainingAndParticipantsContains(User first, User second);
 }

@@ -34,7 +34,7 @@ public class ConversationService {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isEmpty()) {
-            return BasicResponse.builder()
+            return BasicResponse.basicResponseBuilder()
                     .success(false)
                     .message("The requesting user does not exist")
                     .build();
@@ -42,15 +42,15 @@ public class ConversationService {
 
         Optional<User> targetUser = userRepository.findByUsername(startConversationRequest.getUsername());
         if (targetUser.isEmpty()) {
-            return BasicResponse.builder()
+            return BasicResponse.basicResponseBuilder()
                     .success(false)
                     .message("User not found")
                     .build();
         }
 
-        Optional<Conversation> existingConversation = conversationRepository.findByParticipants(List.of(user.get(), targetUser.get()));
+        Optional<Conversation> existingConversation = conversationRepository.findByParticipantsContainingAndParticipantsContains(user.get(), targetUser.get());
         if (existingConversation.isPresent()) {
-            return BasicResponse.builder()
+            return BasicResponse.basicResponseBuilder()
                     .success(false)
                     .message("Conversation already exists")
                     .build();
@@ -61,7 +61,7 @@ public class ConversationService {
         conversation.getParticipants().add(user.get());
         conversation.getParticipants().add(targetUser.get());
 
-        return BasicResponse.builder()
+        return BasicResponse.basicResponseBuilder()
                 .success(true)
                 .message("Conversation started")
                 .build();
