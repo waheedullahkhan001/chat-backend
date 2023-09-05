@@ -8,11 +8,11 @@ import java.util.List;
 
 @Getter
 public class ConversationsResponse extends BasicResponse {
-    private final List<Conversation> conversations;
+    private final List<ConversationResponse> conversations;
 
     @Builder
     public ConversationsResponse(boolean success, String message, List<Conversation> conversations) {
         super(success, message);
-        this.conversations = conversations;
+        this.conversations = conversations.stream().map(ConversationResponse::new).toList();
     }
 }

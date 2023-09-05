@@ -44,8 +44,9 @@ public class ConversationService {
 
         Conversation conversation = new Conversation();
 
-        conversation.getParticipants().add(user);
-        conversation.getParticipants().add(targetUser);
+        conversation.setParticipants(List.of(user, targetUser));
+
+        conversationRepository.save(conversation);
 
         return BasicResponse.basicResponseBuilder()
                 .success(true)

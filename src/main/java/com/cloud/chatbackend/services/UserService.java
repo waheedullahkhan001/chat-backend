@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,17 +34,17 @@ public class UserService {
     }
 
     public LoginResponse login(LoginRequest loginRequest) {
-        Optional<User> user = userRepository.findByUsername(loginRequest.getUsername());
+        User user = userRepository.findByUsername(loginRequest.getUsername()).orElseThrow(
+                () -> new NotFoundException("User not found"));
 
-        if (user.isEmpty()) {
-            throw new NotFoundException("User not found");
-        }
-
-        if (!passwordEncoder.matches(loginRequest.getPassword(), user.get().getPassword())) {
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new BadRequestException("Invalid credentials");
         }
 
-        String token = jwtService.generateToken(user.get().getUsername(), user.get().getRole());
+        user.setLastLogin(new Date());
+        userRepository.save(user);
+
+        String token = jwtService.generateToken(user.getUsername(), user.getRole());
 
         return LoginResponse.builder()
                 .success(true)

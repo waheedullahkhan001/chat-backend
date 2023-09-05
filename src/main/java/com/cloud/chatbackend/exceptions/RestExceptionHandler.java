@@ -18,7 +18,7 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(value = {UnauthorizedException.class})
-    protected ResponseEntity<BasicResponse> handleUnauthorizedException(NotFoundException e) {
+    protected ResponseEntity<BasicResponse> handleUnauthorizedException(UnauthorizedException e) {
         return ResponseEntity.status(401).body(
                 BasicResponse.basicResponseBuilder()
                         .success(false)

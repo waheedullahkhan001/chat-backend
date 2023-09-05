@@ -38,9 +38,10 @@ public class SecurityConfiguration {
 
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(PathRequest.toH2Console()).permitAll()
-                .requestMatchers(mvc.pattern("/swagger-ui/**")).permitAll() // Swagger URL: /swagger-ui/index.html
+                .requestMatchers(mvc.pattern("/swagger-ui/**")).permitAll()
                 .requestMatchers(mvc.pattern("/v3/api-docs/**")).permitAll()
                 .requestMatchers(mvc.pattern("/api/v1/user/**")).permitAll()
+                .requestMatchers(mvc.pattern("/api/v1/**")).hasRole("USER")
                 .anyRequest().authenticated()
         );
 
