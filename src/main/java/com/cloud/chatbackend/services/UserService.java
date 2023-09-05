@@ -1,6 +1,8 @@
 package com.cloud.chatbackend.services;
 
 import com.cloud.chatbackend.entities.User;
+import com.cloud.chatbackend.exceptions.BadRequestException;
+import com.cloud.chatbackend.exceptions.NotFoundException;
 import com.cloud.chatbackend.repositories.UserRepository;
 import com.cloud.chatbackend.requests.LoginRequest;
 import com.cloud.chatbackend.requests.RegisterRequest;
@@ -24,21 +26,15 @@ public class UserService {
     private final JwtService jwtService;
 
 
-    public BasicResponse login(LoginRequest loginRequest) {
+    public LoginResponse login(LoginRequest loginRequest) {
         Optional<User> user = userRepository.findByUsername(loginRequest.getUsername());
 
         if (user.isEmpty()) {
-            return BasicResponse.basicResponseBuilder()
-                    .success(false)
-                    .message("User not found")
-                    .build();
+            throw new NotFoundException("User not found");
         }
 
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.get().getPassword())) {
-            return BasicResponse.basicResponseBuilder()
-                    .success(false)
-                    .message("Incorrect password")
-                    .build();
+            throw new BadRequestException("Invalid credentials");
         }
 
         String token = jwtService.generateToken(user.get().getUsername(), user.get().getRole());
@@ -52,10 +48,7 @@ public class UserService {
 
     public BasicResponse register(RegisterRequest registerRequest) {
         if (userRepository.findByUsername(registerRequest.getUsername()).isPresent()) {
-            return BasicResponse.basicResponseBuilder()
-                    .success(false)
-                    .message("User already exists")
-                    .build();
+            throw new BadRequestException("Username already exists");
         }
 
         registerRequest.setPassword(passwordEncoder.encode(registerRequest.getPassword()));

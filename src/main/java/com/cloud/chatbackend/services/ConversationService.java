@@ -2,6 +2,8 @@ package com.cloud.chatbackend.services;
 
 import com.cloud.chatbackend.entities.Conversation;
 import com.cloud.chatbackend.entities.User;
+import com.cloud.chatbackend.exceptions.BadRequestException;
+import com.cloud.chatbackend.exceptions.UnauthorizedException;
 import com.cloud.chatbackend.repositories.ConversationRepository;
 import com.cloud.chatbackend.repositories.UserRepository;
 import com.cloud.chatbackend.requests.StartConversationRequest;
@@ -42,18 +44,12 @@ public class ConversationService {
 
         Optional<User> targetUser = userRepository.findByUsername(startConversationRequest.getUsername());
         if (targetUser.isEmpty()) {
-            return BasicResponse.basicResponseBuilder()
-                    .success(false)
-                    .message("User not found")
-                    .build();
+            throw new UnauthorizedException("The target user does not exist");
         }
 
         Optional<Conversation> existingConversation = conversationRepository.findByParticipantsContainingAndParticipantsContains(user.get(), targetUser.get());
         if (existingConversation.isPresent()) {
-            return BasicResponse.basicResponseBuilder()
-                    .success(false)
-                    .message("Conversation already exists")
-                    .build();
+            throw new BadRequestException("The conversation already exists");
         }
 
         Conversation conversation = new Conversation();
