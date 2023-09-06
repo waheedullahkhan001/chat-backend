@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,7 +15,7 @@ import java.util.List;
 @Setter
 public class Conversation extends AbstractPersistable<Long> {
     @ManyToMany
-    private List<User> participants;
+    private List<User> participants = new ArrayList<>();
     @OneToMany(mappedBy = "conversation")
-    private List<Message> messages;
+    private List<Message> messages = new ArrayList<>();
 }

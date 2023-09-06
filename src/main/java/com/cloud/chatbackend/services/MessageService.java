@@ -45,10 +45,10 @@ public class MessageService {
                 .build();
     }
 
-    public ConversationMessagesResponse getConversationMessages(String conversationId) {
+    public ConversationMessagesResponse getConversationMessages(Long conversationId) {
         User user = userService.getUserFromContext();
 
-        Optional<Conversation> conversation = conversationRepository.findById(Long.parseLong(conversationId));
+        Optional<Conversation> conversation = conversationRepository.findById(conversationId);
         if (conversation.isEmpty() || !conversation.get().getParticipants().contains(user)) {
             throw new UnauthorizedException("The requesting user is not a participant of the conversation");
         }

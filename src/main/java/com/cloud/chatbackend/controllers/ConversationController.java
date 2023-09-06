@@ -3,6 +3,7 @@ package com.cloud.chatbackend.controllers;
 import com.cloud.chatbackend.requests.StartConversationRequest;
 import com.cloud.chatbackend.responses.BasicResponse;
 import com.cloud.chatbackend.services.ConversationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class ConversationController {
     }
 
     @PostMapping("/start")
-    public BasicResponse startConversation(@RequestBody StartConversationRequest startConversationRequest) {
+    public BasicResponse startConversation(@Valid @RequestBody StartConversationRequest startConversationRequest) {
         return conversationService.startConversation(startConversationRequest);
     }
 }

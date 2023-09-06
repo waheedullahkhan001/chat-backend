@@ -4,6 +4,7 @@ import com.cloud.chatbackend.requests.LoginRequest;
 import com.cloud.chatbackend.requests.RegisterRequest;
 import com.cloud.chatbackend.responses.BasicResponse;
 import com.cloud.chatbackend.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,13 +19,13 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public BasicResponse login(@RequestBody LoginRequest loginRequest) {
+    public BasicResponse login(@Valid @RequestBody LoginRequest loginRequest) {
         return userService.login(loginRequest);
     }
 
 
     @PostMapping("/register")
-    public BasicResponse register(@RequestBody RegisterRequest registerRequest) {
+    public BasicResponse register(@Valid @RequestBody RegisterRequest registerRequest) {
         return userService.register(registerRequest);
     }
 }
