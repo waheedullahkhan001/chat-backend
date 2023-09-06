@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class LoginResponse extends BasicResponse{
+public class LoginResponse extends BasicResponse {
     private final String token;
 
     @Builder
