@@ -29,11 +29,13 @@ public class AuthFilter extends BasicAuthenticationFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        String header = request.getHeader("Authorization");
+        String jwt = request.getHeader("Authorization");
 
-        if (header != null && header.startsWith("Bearer ")) {
+        if (jwt != null) {
 
-            String jwt = header.replaceFirst("Bearer ", "");
+            if (jwt.startsWith("Bearer ")) {
+                jwt = jwt.replaceFirst("Bearer ", "");
+            }
 
             try {
                 DecodedJWT decodedJWT = jwtService.getDecodedToken(jwt);

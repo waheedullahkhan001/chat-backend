@@ -41,7 +41,7 @@ public class SecurityConfiguration {
                 .requestMatchers(mvc.pattern("/swagger-ui/**")).permitAll()
                 .requestMatchers(mvc.pattern("/v3/api-docs/**")).permitAll()
                 .requestMatchers(mvc.pattern("/api/v1/user/**")).permitAll()
-                .requestMatchers(mvc.pattern("/api/v1/**")).hasRole("USER")
+                .requestMatchers(mvc.pattern("/**")).hasRole("USER")
                 .anyRequest().authenticated()
         );
 

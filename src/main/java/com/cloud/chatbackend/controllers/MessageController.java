@@ -22,7 +22,9 @@ public class MessageController {
     }
 
     @GetMapping("/{conversationId}")
-    public BasicResponse getConversationMessages(@PathVariable("conversationId") @Min(1) @Max(Long.MAX_VALUE) Long conversationId) {
+    public BasicResponse getConversationMessages(
+            @PathVariable("conversationId") @Min(1) @Max(Long.MAX_VALUE) Long conversationId
+    ) {
         return messageService.getConversationMessages(conversationId);
     }
 }

@@ -1,7 +1,7 @@
 ## Description
 
 This is a backend written in Spring Boot for a chat app with the most basic functionality only.
-> Warning: Not even nearly ready for normal use.
+> Warning: Not even nearly ready for use.
 
 ### Roadmap:
 

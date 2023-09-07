@@ -1,8 +1,7 @@
 package com.cloud.chatbackend.requests;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,13 +9,14 @@ import lombok.Setter;
 @Setter
 public class RegisterRequest {
     @NotBlank
-    @Min(value = 3, message = "Display name must be at least 3 characters long")
-    @Max(value = 40, message = "Display name must be at most 40 characters long")
+    @Size(min = 3, max = 40, message = "Display name must be at least 3 characters long and at most 40 characters long")
     private String displayName;
-    @Min(value = 3, message = "Username must be at least 3 characters long")
-    @Max(value = 20, message = "Username must be at most 20 characters long")
+
+    @NotBlank
+    @Size(min = 3, max = 20, message = "Username must be at least 3 characters long and at most 20 characters long")
     private String username;
-    @Min(value = 6, message = "Password must be at least 6 characters long")
-    @Max(value = 20, message = "Password must be at most 20 characters long")
+
+    @NotBlank
+    @Size(min = 8, max = 20, message = "Password must be at least 8 characters long and at most 20 characters long")
     private String password;
 }

@@ -14,7 +14,7 @@ public class ConversationController {
 
     private final ConversationService conversationService;
 
-    @GetMapping("/getAll")
+    @GetMapping("/all")
     public BasicResponse getAllConversations() {
         return conversationService.getAllConversations();
     }

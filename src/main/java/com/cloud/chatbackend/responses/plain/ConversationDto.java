@@ -1,4 +1,4 @@
-package com.cloud.chatbackend.responses;
+package com.cloud.chatbackend.responses.plain;
 
 import com.cloud.chatbackend.entities.Conversation;
 import com.cloud.chatbackend.entities.User;
@@ -9,11 +9,11 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ConversationResponse {
+public class ConversationDto {
     public Long id;
     public List<String> participants;
 
-    public ConversationResponse(Conversation conversation) {
+    public ConversationDto(Conversation conversation) {
         this.id = conversation.getId();
         this.participants = conversation.getParticipants().stream().map(User::getUsername).toList();
     }

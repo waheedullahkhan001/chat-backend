@@ -3,6 +3,7 @@ package com.cloud.chatbackend.exceptions;
 import com.cloud.chatbackend.responses.BasicResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -21,7 +22,7 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(value = {BadRequestException.class})
     protected ResponseEntity<BasicResponse> handleBadRequestException(BadRequestException e) {
-        return ResponseEntity.status(400).body(
+        return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body(
                 BasicResponse.basicResponseBuilder()
                         .success(false)
                         .message(e.getMessage())
@@ -31,7 +32,7 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(value = {UnauthorizedException.class})
     protected ResponseEntity<BasicResponse> handleUnauthorizedException(UnauthorizedException e) {
-        return ResponseEntity.status(401).body(
+        return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body(
                 BasicResponse.basicResponseBuilder()
                         .success(false)
                         .message(e.getMessage())
@@ -41,7 +42,7 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(value = {NotFoundException.class})
     protected ResponseEntity<BasicResponse> handleNotFoundException(NotFoundException e) {
-        return ResponseEntity.status(404).body(
+        return ResponseEntity.status(HttpServletResponse.SC_NOT_FOUND).body(
                 BasicResponse.basicResponseBuilder()
                         .success(false)
                         .message(e.getMessage())
@@ -58,7 +59,7 @@ public class RestExceptionHandler {
             errors.put(fieldName, errorMessage);
         });
 
-        return ResponseEntity.status(400).body(
+        return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body(
                 BasicResponse.basicResponseBuilder()
                         .success(false)
                         .message(objectMapper.writeValueAsString(errors))
